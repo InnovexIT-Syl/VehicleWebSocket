@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/JavaWebSocketClientApp.iml" filepath="$PROJECT_DIR$/JavaWebSocketClientApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/VehicleWebSocket.iml" filepath="$PROJECT_DIR$/VehicleWebSocket.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

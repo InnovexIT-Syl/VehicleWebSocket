@@ -1,0 +1,89 @@
+syntax = 'proto3';
+
+package protobuf.data;
+
+
+message vehimageinfo {
+    bytes vehicleimage_data = 1;
+    int32 vehicleimageheight = 2;
+    int32 vehicleimagewidth = 3;
+    bytes plateimage_data = 4;
+    int32 plateimageheight = 5;
+    int32 plateimagewidth = 6;
+    string gatenumber=7;
+    int32 vehicledirection=8;
+	string vehiclenumber=9;
+	string uniquenumber=10;
+	string imagefilename=11;
+	bool hasmatched=12;
+
+}
+
+message correctedimageinfo {
+    string gatenumber=1;
+    int32 vehicledirection=2;
+	string vehiclenumberorig=3;
+	string uniquenumber=4;
+	string imagefilename=5;
+	string vehiclenumbercorrected=6;
+	int64 vehicleid=7;
+	int64 userid=8;
+	string guestname=9;
+	string guestphonenumber=10;
+	int32 vehtype=11;
+	bool didmatch=12;
+	
+
+}
+
+
+message regvehinfo {
+	string vehiclenumber=1;
+	int32 userid=2;
+	int32 vehicleid=3;
+
+}
+
+
+message userinfo {
+	int64 userid=1;
+	string unitname=2;
+	string username=3;
+
+}
+
+message regvehicleinfolistAndUserList {
+	repeated regvehinfo regvehinfol=1;
+	repeated userinfo userlist=2;
+	int64 lastupdatedtime=3;
+	string uniquenumber=4;
+	
+}
+
+message detectioninfo {
+    string gatenumber=1;
+    int32 vehicledirection=2;
+	string vehiclenumberorig=3;
+	string filename=4;
+	string uniquenumber=5;
+
+}
+
+message inforesponse {
+	int32 clientid =1;
+	int32 uniquenumber=2;
+	string errormsg=3;
+
+}
+
+
+
+message vehinfomsgs {
+  oneof test_oneof {
+     regvehicleinfolistAndUserList regvehlist_user = 1;
+     vehimageinfo vehinfo = 2;
+	 detectioninfo detinf=3;
+	 inforesponse infr=4;
+	 correctedimageinfo corinf=5;
+  }
+}

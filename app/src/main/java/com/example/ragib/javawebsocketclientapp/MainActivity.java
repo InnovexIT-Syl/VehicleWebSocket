@@ -20,9 +20,12 @@ import java.net.URISyntaxException;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import protobuf.data.Vehimage;
 import tech.gusavila92.websocketclient.WebSocketClient;
+
 
 public class MainActivity extends AppCompatActivity {
     private WebSocketClient webSocketClient;
@@ -36,11 +39,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.animal_sounds);
         mRegisterVehicleDictionary= new HashMap<String, Vehimage.regvehinfo>();
         mainUIHandler = new Handler() {
+
             @Override
             public void handleMessage(Message msg) {
                 // TODO Auto-generated method stub
                 Toast.makeText(getApplicationContext(),
-                        "Random no " + msg.obj + " from BGThread",
+                        "Random no " + (String) msg.obj + " from BGThread",
                         Toast.LENGTH_SHORT).show();
             }
 
@@ -53,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             // Connect to local host
             uri = new URI("ws://10.0.2.2:9002");
+            Log.i("WebSocket", "Session is building");
         }
         catch (URISyntaxException e) {
             e.printStackTrace();
@@ -63,14 +68,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onOpen() {
                 Log.i("WebSocket", "Session is starting");
-                webSocketClient.send("Hello World!");
+                webSocketClient.send("Hello world!");
             }
 
             @Override
             public void onTextReceived(String s) {
                 Log.i("WebSocket", "Message received");
                 //protobuf.data.Vehimage.vehimageinfo ab = protobuf.data.Vehimage.vehimageinfo.parseFrom(ByteString.);
-                final String message = "Still here";
+                final String message = s;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -85,26 +90,29 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onBinaryReceived(byte[] data)
-            {
+            public void onBinaryReceived(byte[] data) {
+                Log.i("WebSocket", "ByteMessage received");
                 try {
                     protobuf.data.Vehimage.vehinfomsgs ab = protobuf.data.Vehimage.vehinfomsgs.parseFrom(data);
                     //final String message;
-                    if(ab.getVehinfo() !=null) {
-                        //protobuf.data.Vehimage.vehimageinfo ab = protobuf.data.Vehimage.vehimageinfo.parseFrom(ByteString.);
-                        //message = ab.getVehinfo().getVehiclenumber();
-                        if (mainUIHandler != null) {
-                            Message message = mainUIHandler.obtainMessage();
-                            message.obj = ab.getVehinfo().getVehiclenumber();
-                            mainUIHandler.sendMessage(message);
-                        }
+                    if (ab.getTestOneofCase().getNumber()==2)
+                    {
+                        final protobuf.data.Vehimage.vehimageinfo vm = ab.getVehinfo();
 
                     }
-                    else if(ab.getRegvehlist() !=null)
+                    else if (ab.getTestOneofCase().getNumber()==1)
+
                     {
-                        for(Vehimage.regvehinfo k : ab.getRegvehlist().getRegvehinfolList())
-                        {
-                            mRegisterVehicleDictionary.put(k.getVehiclenumber(),k);
+                        final protobuf.data.Vehimage.regvehicleinfolistAndUserList riu = ab.getRegvehlistUser();
+
+
+                        for (Vehimage.regvehinfo k : riu.getRegvehinfolList()) {
+                            //mRegisterk.VehicleDictionary.put(k.getVehiclenumber(),k);
+                            //k.getVehicleid()
+                        }
+
+                        for (Vehimage.userinfo k : riu.getUserlistList()) {
+                            //mRegisterVehicleDictionary.put(k.getVehiclenumber(),k);
                         }
 
                         //message=null;
@@ -113,8 +121,7 @@ public class MainActivity extends AppCompatActivity {
                     //message=null;
 
 
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -127,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onException(Exception e) {
+                Log.i("WebSocket", "problem!"+e);
                 System.out.println(e.getMessage());
             }
 
@@ -136,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("onCloseReceived");
             }
         };
+
 
         webSocketClient.setConnectTimeout(10000);
         webSocketClient.setReadTimeout(60000);
