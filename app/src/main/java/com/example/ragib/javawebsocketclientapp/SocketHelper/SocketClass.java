@@ -14,8 +14,8 @@ import tech.gusavila92.websocketclient.WebSocketClient;
 
 public class SocketClass {
     public interface SocketInterface{
-        public void onTextReceived(String msg);
-        public void onBytesReceived(byte[] bytes);
+        void onTextReceived(String msg);
+        void onBytesReceived(byte[] bytes);
     }
     SocketInterface socketInterface;
 
@@ -45,7 +45,7 @@ public class SocketClass {
 
             @Override
             public void onBinaryReceived(byte[] data) {
-
+                socketInterface.onBytesReceived(data);
             }
 
             @Override

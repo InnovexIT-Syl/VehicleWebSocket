@@ -24,10 +24,9 @@ public class _2ConfigureIPActivity extends AppCompatActivity implements SocketCl
     }
 
     private void setUp() {
-        getSupportActionBar().setTitle("Configure End Points");//setting up title name
         //getting references of the views
-        ipET=findViewById(R.id.editText2);
-        portET=findViewById(R.id.editText);
+        ipET=findViewById(R.id.serverIp);
+        portET=findViewById(R.id.serverport);
         //setting the ip and port from memory (if any is stored)
         SharedPreferences sharedPreferences=getSharedPreferences(Model.SHARED_PREF,MODE_PRIVATE);
         String ip=sharedPreferences.getString(Model.IP_KEY,"");

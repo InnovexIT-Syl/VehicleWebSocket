@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +12,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.ragib.javawebsocketclientapp.SocketHelper.SocketClass;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import protobuf.data.Vehimage;
 
 /*
 Notes: The app will start from this activity. For now MainActivity is of no work. The communication part of MainActivity will be
@@ -21,20 +29,36 @@ _1SignInActivity.websocket.
 public class _1SignInActivity extends AppCompatActivity implements SocketClass.SocketInterface{
     EditText nameET,passwordET;
     Button configureBt,signInBt;
-
+    private Map<String, Vehimage.regvehinfo> mRegisterVehicleDictionary ;
+    private List dummRegDictionary;
+    int flag = 0;
     SocketClass.SocketInterface socketInterface;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity__1_sign_in);
-        setUp();
-        testStart();
+        mRegisterVehicleDictionary= new HashMap<>();
+        dummRegDictionary= new ArrayList();
 
+        someDummyRegData();
+
+        setUp();
         createSocket();
+        new NetworkThread().start();
         /*initializing Model.socketClass only once in this activity
         the attached interface will receive message from the class
         */
 
+    }
+
+    private void someDummyRegData() {
+        dummRegDictionary.add("KJHFGFH");
+        dummRegDictionary.add("HJGFFKHJ");
+        dummRegDictionary.add("JT23TYU");
+        dummRegDictionary.add("KJHGH87");
+        dummRegDictionary.add("KJVHGK7");
+        dummRegDictionary.add("KJHGFDS6");
+        dummRegDictionary.add("567JHGHJ");
     }
 
     private void createSocket() {
@@ -54,14 +78,13 @@ public class _1SignInActivity extends AppCompatActivity implements SocketClass.S
     }
 
     private void setUp() { //setup view
-        getSupportActionBar().setTitle("Sign In"); //setting title
 
         socketInterface=this;//SocketInterface attached to the activity
         // getting the references of the views
-        nameET=findViewById(R.id.editText2);
-        passwordET=findViewById(R.id.editText);
-        configureBt=findViewById(R.id.configureTextView);
-        signInBt=findViewById(R.id.button3);
+        nameET=findViewById(R.id.editTextName);
+        passwordET=findViewById(R.id.editTextPassword);
+        configureBt=findViewById(R.id.configureBtn);
+        signInBt=findViewById(R.id.buttonSignUp);
 
         // using share preference to load previously set ip and port. saving the data in Model.java variables
         SharedPreferences sharedPreferences=getSharedPreferences(Model.SHARED_PREF,MODE_PRIVATE);
@@ -104,7 +127,45 @@ public class _1SignInActivity extends AppCompatActivity implements SocketClass.S
 
     @Override
     public void onBytesReceived(byte[] bytes) {
-
+//        Log.i("WebSocket", "ByteMessage received");
+//        try {
+//            protobuf.data.Vehimage.vehinfomsgs ab =
+//                    protobuf.data.Vehimage.vehinfomsgs.parseFrom(bytes);
+//            final String message;
+//            if (ab.getTestOneofCase().getNumber()==2)
+//            {
+//                final protobuf.data.Vehimage.vehimageinfo vm = ab.getVehinfo();
+//                for (Vehimage.regvehinfo k : mRegisterVehicleDictionary.values()){
+//                    if (vm.getVehiclenumber().equals(k.getVehiclenumber())){
+//
+//                    }
+//                }
+//
+//            }
+//            else if (ab.getTestOneofCase().getNumber()==1)
+//
+//            {
+//                final protobuf.data.Vehimage.regvehicleinfolistAndUserList riu = ab.getRegvehlistUser();
+//
+//
+//                for (Vehimage.regvehinfo k : riu.getRegvehinfolList()) {
+//                    mRegisterVehicleDictionary.put(k.getVehiclenumber(),k);
+//                    k.getVehicleid()
+//                }
+//
+//                for (Vehimage.userinfo k : riu.getUserlistList()) {
+//                    mRegisterVehicleDictionary.put(k.getVehiclenumber(),k);
+//                }
+//
+//                message=null;
+//            }
+//            else
+//            message=null;
+//
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     class NetworkThread implements Runnable{
@@ -116,6 +177,16 @@ public class _1SignInActivity extends AppCompatActivity implements SocketClass.S
         @Override
         public void run() {
             //do networking processing here...
+            Intent intent = getIntent();
+            String ocrNumber = intent.getStringExtra("ocr");
+
+            for(int i=0; i<dummRegDictionary.size();i++){
+                if (dummRegDictionary.get(i).equals(ocrNumber)){
+                    flag=1;
+                }
+            }
+            if (flag==0)
+                testStart();
             Model.socketClass=new SocketClass(socketInterface);
             //after verification start next activity
 //            startActivity(new Intent(getApplicationContext(),_3ScreenOneActivity.class));

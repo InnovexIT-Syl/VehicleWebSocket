@@ -33,7 +33,6 @@ public class _3ScreenOneActivity extends AppCompatActivity implements SocketClas
     }
 
     private void setUp() { //setup views
-        getSupportActionBar().setTitle("Message Activity");
 
         messageTV=findViewById(R.id.textView);
     }

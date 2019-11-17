@@ -98,6 +98,11 @@ public class MainActivity extends AppCompatActivity {
                     if (ab.getTestOneofCase().getNumber()==2)
                     {
                         final protobuf.data.Vehimage.vehimageinfo vm = ab.getVehinfo();
+                        for (Vehimage.regvehinfo k : mRegisterVehicleDictionary.values()){
+                            if (vm.getVehiclenumber().equals(k.getVehiclenumber())){
+
+                            }
+                        }
 
                     }
                     else if (ab.getTestOneofCase().getNumber()==1)
@@ -107,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                         for (Vehimage.regvehinfo k : riu.getRegvehinfolList()) {
-                            //mRegisterk.VehicleDictionary.put(k.getVehiclenumber(),k);
+                            //mRegisterVehicleDictionary.put(k.getVehiclenumber(),k);
                             //k.getVehicleid()
                         }
 

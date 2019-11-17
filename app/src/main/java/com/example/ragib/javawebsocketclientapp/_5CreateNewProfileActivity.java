@@ -2,6 +2,7 @@ package com.example.ragib.javawebsocketclientapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.ragib.javawebsocketclientapp.SocketHelper.SocketClass;
 
@@ -19,7 +20,6 @@ public class _5CreateNewProfileActivity extends AppCompatActivity implements Soc
     }
 
     private void setUp() { //setup views
-        getSupportActionBar().setTitle("Create New Profile");
     }
 
     @Override
@@ -30,5 +30,9 @@ public class _5CreateNewProfileActivity extends AppCompatActivity implements Soc
     @Override
     public void onBytesReceived(byte[] bytes) {
 
+    }
+
+    public void onClickSendServer(View view) {
+        finish();
     }
 }

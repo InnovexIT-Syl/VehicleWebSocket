@@ -12,10 +12,13 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.ragib.javawebsocketclientapp.SearchTableView.ListAdapter;
@@ -37,7 +40,8 @@ public class _4ScreenTwoActivity extends AppCompatActivity implements ListAdapte
     EditText editText1,editText2; //change these names according to the context
     ImageView imageView;
     PhotoViewAttacher photoViewAttacher; //for zoomable imageview
-    LinearLayout processingLinearLayout; //this layout contains the 'processing..' layout. It will be visible when processing, invisible otherwise.
+    RelativeLayout processingRelativeLayout; //this layout contains the 'processing..' layout. It will be
+    // visible when processing, invisible otherwise.
     List<String> lookUpTableNumbers;//this is the table that needs to initialize in setup accordingly to the lookuptabel
     RecyclerView recyclerView;
     List<ListItem> listItems=new ArrayList<>();
@@ -108,7 +112,7 @@ public class _4ScreenTwoActivity extends AppCompatActivity implements ListAdapte
     }
 
     private void setUp() { //setup views
-        getSupportActionBar().setTitle("Recheck Vehicle Image");
+
 
         onClickRecycleView=this;
         //Initialize the unique lookUpTableNumbers from Model.lookUpTable
@@ -126,9 +130,9 @@ public class _4ScreenTwoActivity extends AppCompatActivity implements ListAdapte
         recyclerView.setAdapter(listAdapter);
 
         //
-        okayBt=findViewById(R.id.button2);
-        editText1=findViewById(R.id.editText3);
-        editText2=findViewById(R.id.editText4);
+        okayBt=findViewById(R.id.okBtn);
+        editText1=findViewById(R.id.vehicleMake);
+        editText2=findViewById(R.id.vehicleClass);
         imageView=findViewById(R.id.imageView2);
         photoViewAttacher=new PhotoViewAttacher(imageView);
 
@@ -144,13 +148,13 @@ public class _4ScreenTwoActivity extends AppCompatActivity implements ListAdapte
         }
         */
 
-        processingLinearLayout=findViewById(R.id.defaultProgressLinearLayout);
+        processingRelativeLayout=findViewById(R.id.default_relative_layout);
         //when ever processing data: processingLinearLayout.setVisibility(View.VISIBLE);
         //when finished processing data: processingLinearLayout.setVisibility(View.GONE);
     }
 
     public void onClickOkay(View view){
-
+        startActivity(new Intent(getApplicationContext(), _1SignInActivity.class));
     }
 
     @Override
